@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import project.comp3607.events.Event;
 import project.comp3607.model.Session;
+import project.comp3607.model.SessionSummary;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -22,11 +23,11 @@ public class JsonExporter implements ExporterInterface {
         String filename = session.getSessionId() + ".json";
          JsonObject root = new JsonObject();
         //session summary not defined yet placeholer
-        //  SessionSummary summary = SessionSummary.compute(session);
+          SessionSummary summary = SessionSummary.compute(session);
 
         root.addProperty("schema_version", "1.0");
         root.add("session", buildSession(session));
-        //root.add("summary", buildSummary(summary));
+        root.add("summary", buildSummary(summary));
         root.add("events",  buildEvents(session));
 
         try (FileWriter writer = new FileWriter(filename)) {

@@ -93,30 +93,7 @@ public class PdfExporter implements ExporterInterface {
     }
 
 
-    private void addHeader(Document doc, Session session, SessionSummary sum) throws Exception {
-        Paragraph title = new Paragraph("BlueJ Session Report", TITLE);
-        title.setAlignment(Element.ALIGN_CENTER);
-        doc.add(title);
-        doc.add(Chunk.NEWLINE);
 
-        PdfPTable meta = new PdfPTable(2);
-        meta.setWidthPercentage(70);
-        meta.setHorizontalAlignment(Element.ALIGN_LEFT);
-        meta.setWidths(new float[]{1, 2});
-
-        row(meta, "Student ID",  session.getStudentId());
-        row(meta, "Session ID",  session.getSessionId());
-        row(meta, "Started",     fmt(session.getStartTime()));
-        row(meta, "Ended",       fmt(session.getEndTime()));
-        row(meta, "Duration",    (sum.activeSeconds + sum.idleSeconds) + " s");
-        row(meta, "Compilations", sum.totalCompilations
-                + "  (" + sum.successfulCompilations + " ok / "
-                + sum.failedCompilations + " failed, "
-                + String.format("%.0f%%", sum.compileSuccessRate * 100) + ")");
-
-        doc.add(meta);
-        doc.add(Chunk.NEWLINE);
-    }
 
         //Graph and histogram summary
     private void addActiveIdleChart(Document doc, SessionSummary sum) throws Exception {
