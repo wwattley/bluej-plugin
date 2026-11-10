@@ -11,4 +11,6 @@ public interface ExporterInterface {
 
     void export(Session session);
 
+    //returns a PDF OR JSON
+    String getDisplayName();
 }
