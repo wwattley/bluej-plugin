@@ -1,0 +1,17 @@
+# EditorConfig for Java and XML project
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Use 2-space indentation for XML configuration files
+[*.xml]
+indent_style = space
+indent_size = 2
+
+# Use 4-space indentation for Java source files
+[*.java]
+indent_style = space
+indent_size = 4
