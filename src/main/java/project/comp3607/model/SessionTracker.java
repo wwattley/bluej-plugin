@@ -4,6 +4,8 @@ import project.comp3607.events.Event;
 import project.comp3607.events.EventFactory;
 import project.comp3607.export.ExporterInterface;
 
+import project.comp3607.model.Session;
+
 import java.util.List;
 
 public class SessionTracker {
@@ -27,8 +29,10 @@ public class SessionTracker {
             Event event = factory.createSessionEndEvent();
             current.addEvent(event);
 
+            SessionSummary summary = new SessionSummary(current);
+
             for (ExporterInterface exporter : exporters) {
-                exporter.export(current);
+                exporter.export(summary);
             }
 
             current = null;
