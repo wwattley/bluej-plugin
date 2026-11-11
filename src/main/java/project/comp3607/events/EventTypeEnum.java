@@ -8,7 +8,15 @@ public enum EventTypeEnum {
 
     // Project lifecycle
     PACKAGE_OPEN("PO"),
-    PACKAGE_CLOSE("PC");
+    PACKAGE_CLOSE("PC"),
+
+    // Class Lifecycle
+    CLASS_CREATED("CC"),
+    CLASS_DELETED("CD"),
+
+    // Compilation
+    COMPILE_SUCCEEDED("CS"),
+    COMPILE_ERROR("CE");
 
     private final String code;
 
