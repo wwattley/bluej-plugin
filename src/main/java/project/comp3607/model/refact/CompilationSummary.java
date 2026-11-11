@@ -63,7 +63,7 @@ public class CompilationSummary {
         int totalCompiles = successfulCompiles + failedCompiles;
         double compilationSuccessRate = totalCompiles == 0
             ? 0.0
-            : (double) successfulCompiles / totalCompiles;
+            : ((double) successfulCompiles / totalCompiles) * 100.0;
 
         return new CompilationSummary(
             totalCompiles,
