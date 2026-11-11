@@ -3,6 +3,11 @@ package project.comp3607.model;
 import java.util.List;
 import java.util.Map;
 
+/*
+    Deprecated:
+    This class is no longer used
+*/
+
 public class SessionReport {
     public SessionMeta session;
     public Summary summary;

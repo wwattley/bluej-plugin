@@ -1,4 +1,4 @@
-package project.comp3607.model.refact;
+package project.comp3607.model;
 
 import project.comp3607.events.Event;
 import project.comp3607.events.EventTypeEnum;
