@@ -88,8 +88,8 @@ public class PdfExporter implements ExporterInterface {
         row(meta, "Compilations", summary.getCompilationSummary().getTotalCompilations()
                 + "  (" + summary.getCompilationSummary().getSuccessfulCompilations + " success / "
                 + summary.getCompilationSummary().getFailedCompilations() + " failed, "
-                + String.format("%.0f%%", summary.getCompilationSummary().getSuccessfulCompilations
-                /summary.getCompilationSummary().getTotalCompilations())+ "successrate" + ")");
+                + String.format("%.0f%%", summary.getCompilationSummary().getCompilationSuccessRate()
+            )+ "successrate" + ")");
 
         doc.add(meta);
         doc.add(Chunk.NEWLINE);
