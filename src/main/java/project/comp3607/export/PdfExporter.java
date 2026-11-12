@@ -142,31 +142,31 @@ public class PdfExporter implements ExporterInterface {
     private void addProgressionTimeline(Document doc, SessionSummary summary) throws Exception {
         doc.add(new Paragraph("Progression Timeline", H2));
 
-        List<Event> progression = summary.getSessionSummary().getEvents().stream()
-                .filter(e -> switch (e.getEventType()) {
-                    case SESSION_START, SESSION_END ->true; //CLASS_MODIFIED, METHOD_ADDED -> true;
-                    default -> false;
-                })
-                .toList();
+        // List<Event> progression = summary.getSessionSummary().getEvents().stream()
+        //         .filter(e -> switch (e.getEventType()) {
+        //             case SESSION_START, SESSION_END ->true; //CLASS_MODIFIED, METHOD_ADDED -> true;
+        //             default -> false;
+        //         })
+        //         .toList();
 
-        if (progression.isEmpty()) {
-            doc.add(new Paragraph("No class or method events recorded.", MUTED));
-            return;
-        }
+        // if (progression.isEmpty()) {
+        //     doc.add(new Paragraph("No class or method events recorded.", MUTED));
+        //     return;
+        // }
 
         PdfPTable table = new PdfPTable(3);
         table.setWidthPercentage(100);
         table.setWidths(new float[]{1, 3, 4});
 
-        header(table, "Seq");
-        header(table, "Timestamp");
-        header(table, "Event");
+        // header(table, "Seq");
+        // header(table, "Timestamp");
+        // header(table, "Event");
 
-        for (Event e : progression) {
-            table.addCell(new Phrase(String.valueOf(e.getSequence()), BODY));
-            table.addCell(new Phrase(e.getTimestamp().toString(), BODY));
-            table.addCell(new Phrase(describe(e), BODY));
-        }
+        // for (Event e : progression) {
+        //     table.addCell(new Phrase(String.valueOf(e.getSequence()), BODY));
+        //     table.addCell(new Phrase(e.getTimestamp().toString(), BODY));
+        //     table.addCell(new Phrase(describe(e), BODY));
+        // }
         doc.add(table);
     }
 
@@ -194,21 +194,21 @@ public class PdfExporter implements ExporterInterface {
         t.addCell(c);
     }
 
-    private static String describe(Event e) {
-        Map<String, Object> d = e.getEventDetails();
-        String name = String.valueOf(
-                d.getOrDefault("class_name",
-                d.getOrDefault("method_name", d.getOrDefault("name", ""))));
-        return switch (e.getEventType()) {
-            case SESSION_START -> "Session created" + name;
-            case SESSION_END ->"Session end" + name;
-            // case CLASS_CREATED  -> "class created: "     + name;
-            // case CLASS_DELETED  -> "class deleted: "     + name;
-            // case CLASS_MODIFIED -> "class modified: "    + name;
-            // case METHOD_ADDED   -> "method added: "      + name;
-            default             -> e.getEventType().name();
-        };
-    }
+    // private static String describe(Event e) {
+    //     Map<String, Object> d = e.getEventDetails();
+    //     String name = String.valueOf(
+    //             d.getOrDefault("class_name",
+    //             d.getOrDefault("method_name", d.getOrDefault("name", ""))));
+    //     return switch (e.getEventType()) {
+    //         case SESSION_START -> "Session created" + name;
+    //         case SESSION_END ->"Session end" + name;
+    //         // case CLASS_CREATED  -> "class created: "     + name;
+    //         // case CLASS_DELETED  -> "class deleted: "     + name;
+    //         // case CLASS_MODIFIED -> "class modified: "    + name;
+    //         // case METHOD_ADDED   -> "method added: "      + name;
+    //         default             -> e.getEventType().name();
+    //     };
+    // }
 
     private static String fmt(Instant t) { return t == null ? "(none)" : t.toString(); }
 
