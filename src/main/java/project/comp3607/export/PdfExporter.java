@@ -109,26 +109,21 @@ public class PdfExporter implements ExporterInterface {
         //     return;
         // }
 
-        // DefaultPieDataset<String> data = new DefaultPieDataset<>();
-        // data.setValue("Active (" + active + " s)", active);
-        // data.setValue("Idle ("   + idle   + " s)", idle);
-
-        JFreeChart chart = ChartFactory.createPieChart(
-                null, data, /*legend*/ true, /*tooltips*/ false, /*urls*/ false);
-        embedChart(doc, chart);
+        doc.add(new Paragraph("Active and idle timing data is not available.", MUTED));
+        doc.add(Chunk.NEWLINE);
     }
 
     private void addErrorFrequencyChart(Document doc, SessionSummary summary) throws Exception {
         doc.add(new Paragraph("Compilation Error Frequency", H2));
 
-        if (summary.getErrorFrequency().isEmpty()) {
+        if (summary.getCompilationSummary().getErrorFrequency().isEmpty()) {
             doc.add(new Paragraph("No compilation errors recorded.", MUTED));
             doc.add(Chunk.NEWLINE);
             return;
         }
 
         DefaultCategoryDataset data = new DefaultCategoryDataset();
-        for (Map.Entry<String, Integer> e : summary.getErrorFrequency().entrySet()) {
+        for (Map.Entry<String, Integer> e : summary.getCompilationSummary().getErrorFrequency().entrySet()) {
             data.addValue(e.getValue(), "Errors", e.getKey());
         }
 
