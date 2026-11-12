@@ -86,7 +86,7 @@ public class PdfExporter implements ExporterInterface {
         
         
         row(meta, "Compilations", summary.getCompilationSummary().getTotalCompilations()
-                + "  (" + summary.getCompilationSummary().getSuccessfulCompilations + " success / "
+                + "  (" + summary.getCompilationSummary().getSuccessfulCompilations() + " success / "
                 + summary.getCompilationSummary().getFailedCompilations() + " failed, "
                 + String.format("%.0f%%", summary.getCompilationSummary().getCompilationSuccessRate()
             )+ "successrate" + ")");
@@ -128,7 +128,7 @@ public class PdfExporter implements ExporterInterface {
         }
 
         DefaultCategoryDataset data = new DefaultCategoryDataset();
-        for (Map.Entry<String, Integer> e : summary.getErrorFrequency.entrySet()) {
+        for (Map.Entry<String, Integer> e : summary.getErrorFrequency().entrySet()) {
             data.addValue(e.getValue(), "Errors", e.getKey());
         }
 
