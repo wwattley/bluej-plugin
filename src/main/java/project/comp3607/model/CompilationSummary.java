@@ -2,9 +2,7 @@ package project.comp3607.model;
 
 import project.comp3607.events.Event;
 import project.comp3607.events.EventTypeEnum;
-import project.comp3607.model.Session;
 
-import project.comp3607.events.ErrorCategorizer;
 import project.comp3607.events.ErrorCategoryEnum;
 
 import java.util.List;

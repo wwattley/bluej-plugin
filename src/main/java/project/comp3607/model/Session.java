@@ -24,22 +24,11 @@ public class Session {
 
     public void addEvent(Event event) {
         events.add(event);
-        if (event.getEventType() == EventTypeEnum.SESSION_START) 
+        if (event.getEventType() == EventTypeEnum.SESSION_START)
             startTime = event.getTimestamp();
-        
-        if (event.getEventType() == EventTypeEnum.SESSION_END) 
+
+        if (event.getEventType() == EventTypeEnum.SESSION_END)
                    endTime = event.getTimestamp();
-    }
-
-     public synchronized long getSessionDurationSeconds() {
-
-        if (startTime == null || endTime == null) {
-            return 0;
-        }
-
-        return Duration.between(
-                startTime, endTime
-        ).getSeconds();
     }
 
     public String getSessionId() { return sessionId; }

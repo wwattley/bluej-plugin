@@ -5,7 +5,6 @@ import project.comp3607.events.EventTypeEnum;
 
 import java.util.List;
 
-import project.comp3607.model.Session;
 
 public class ClassLifeSummary {
     private int classesCreated;

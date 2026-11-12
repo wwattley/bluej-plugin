@@ -4,7 +4,6 @@ import project.comp3607.events.Event;
 import project.comp3607.events.EventFactory;
 import project.comp3607.export.ExporterInterface;
 
-import project.comp3607.model.Session;
 
 import java.util.List;
 
