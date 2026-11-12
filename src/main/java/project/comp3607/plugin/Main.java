@@ -2,6 +2,7 @@ package project.comp3607.plugin;
 
 import project.comp3607.model.SessionTracker;
 import project.comp3607.export.JsonExporter;
+import project.comp3607.export.PdfExporter;
 import javafx.scene.control.MenuItem;
 
 import java.util.List;
@@ -13,7 +14,8 @@ public class Main extends bluej.extensions2.Extension {
     public void startup(bluej.extensions2.BlueJ bluej) {
         this.tracker = new SessionTracker(
             List.of(
-                new JsonExporter()
+                new JsonExporter(),
+                new PdfExporter()
             )
         );
 

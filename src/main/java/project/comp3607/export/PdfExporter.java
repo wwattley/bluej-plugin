@@ -1,7 +1,5 @@
 package project.comp3607.export;
 
-import project.comp3607.model.Session;
-//only import what we need
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
@@ -18,16 +16,12 @@ import com.lowagie.text.pdf.PdfWriter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
 
-import project.comp3607.events.Event;
-import project.comp3607.events.EventTypeEnum;
 import project.comp3607.model.SessionSummary;
 
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.time.Instant;
-import java.util.List;
 import java.util.Map;
 
 public class PdfExporter implements ExporterInterface {
@@ -83,8 +77,8 @@ public class PdfExporter implements ExporterInterface {
         row(meta, "Started",     fmt(summary.getSession().getStartTime()));
         row(meta, "Ended",       fmt(summary.getSession().getEndTime()));
         //row(meta, "Duration",    (summary.getSession().getActiveSeconds() + summary.getSession().getIdleSeconds()) + " s");
-        
-        
+
+
         row(meta, "Compilations", summary.getCompilationSummary().getTotalCompilations()
                 + "  (" + summary.getCompilationSummary().getSuccessfulCompilations() + " success / "
                 + summary.getCompilationSummary().getFailedCompilations() + " failed, "
