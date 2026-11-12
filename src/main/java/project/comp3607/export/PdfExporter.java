@@ -42,12 +42,12 @@ public class PdfExporter implements ExporterInterface {
     public String getDisplayName() { return "PDF"; }
 
     @Override
-    public void export(Session session){
 
-         String filename = session.getSessionId() + ".pdf";
-        // Session ssummary not defined yet
-        SessionSummary summary = SessionSummary.compute(session);
+    public void export(SessionSummary summary){
 
+         String filename = summary.getSession().getSessionId() + ".pdf";
+
+            //exception handle when reading files
         try (FileOutputStream out = new FileOutputStream(filename)) {
             Document doc = new Document(PageSize.A4, 40, 40, 40, 40);
             PdfWriter.getInstance(doc, out);
@@ -67,7 +67,7 @@ public class PdfExporter implements ExporterInterface {
     }
 
     //Define header parameters
-     private void addHeader(Document doc, Session session, SessionSummary sum) throws Exception {
+     private void addHeader(Document doc, SessionSummary summary) throws Exception {
         Paragraph title = new Paragraph("BlueJ Session Report", TITLE);
         title.setAlignment(Element.ALIGN_CENTER);
         doc.add(title);
@@ -78,15 +78,15 @@ public class PdfExporter implements ExporterInterface {
         meta.setHorizontalAlignment(Element.ALIGN_LEFT);
         meta.setWidths(new float[]{1, 2});
 
-        row(meta, "Student ID",  session.getStudentId());
-        row(meta, "Session ID",  session.getSessionId());
-        row(meta, "Started",     fmt(session.getStartTime()));
-        row(meta, "Ended",       fmt(session.getEndTime()));
-        row(meta, "Duration",    (sum.activeSeconds + sum.idleSeconds) + " s");
-        row(meta, "Compilations", sum.totalCompilations
-                + "  (" + sum.successfulCompilations + " ok / "
-                + sum.failedCompilations + " failed, "
-                + String.format("%.0f%%", sum.compileSuccessRate * 100) + ")");
+        row(meta, "Student ID",  summary.getSession().getStudentId());
+        row(meta, "Session ID",  summary.getSession().getSessionId());
+        row(meta, "Started",     fmt(summary.getSession().getStartTime()));
+        row(meta, "Ended",       fmt(summary.getSession().getEndTime()));
+        //row(meta, "Duration",    (summary.getSession().getActiveSeconds() + summary.getSession().getIdleSeconds()) + " s");
+        row(meta, "Compilations", summary.getCompilationSummary().getTotalCompilations()
+                + "  (" + summary.successfulCompilations + " ok / "
+                + summary.failedCompilations + " failed, "
+                + String.format("%.0f%%", summary.compileSuccessRate * 100) + ")");
 
         doc.add(meta);
         doc.add(Chunk.NEWLINE);
@@ -96,10 +96,10 @@ public class PdfExporter implements ExporterInterface {
 
 
         //Graph and histogram summary
-    private void addActiveIdleChart(Document doc, SessionSummary sum) throws Exception {
+    private void addActiveIdleChart(Document doc, SessionSummary summary) throws Exception {
         doc.add(new Paragraph("Active vs Idle Time", H2));
 
-        long active = sum.activeSeconds, idle = sum.idleSeconds;
+        long active = summary.getSessionSummary().getActiveSeconds(), idle = summary.getSessionSummary().getIdleSeconds();
         if (active + idle == 0) {
             doc.add(new Paragraph("No timed events recorded.", MUTED));
             doc.add(Chunk.NEWLINE);
@@ -115,7 +115,7 @@ public class PdfExporter implements ExporterInterface {
         embedChart(doc, chart);
     }
 
-    private void addErrorFrequencyChart(Document doc, SessionSummary sum) throws Exception {
+    private void addErrorFrequencyChart(Document doc, SessionSummary summary) throws Exception {
         doc.add(new Paragraph("Compilation Error Frequency", H2));
 
         if (sum.errorFrequency.isEmpty()) {
@@ -136,10 +136,10 @@ public class PdfExporter implements ExporterInterface {
         embedChart(doc, chart);
     }
 
-    private void addProgressionTimeline(Document doc, Session session) throws Exception {
+    private void addProgressionTimeline(Document doc, SessionSummary summary) throws Exception {
         doc.add(new Paragraph("Progression Timeline", H2));
 
-        List<Event> progression = session.getEvents().stream()
+        List<Event> progression = session.getSessionSummary().getEvents().stream()
                 .filter(e -> switch (e.getEventType()) {
                     case SESSION_START, SESSION_END ->true; //CLASS_MODIFIED, METHOD_ADDED -> true;
                     default -> false;
