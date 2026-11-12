@@ -19,19 +19,18 @@ public class JsonExporter implements ExporterInterface {
     public String getDisplayName() { return "JSON"; }
 
     @Override
-    public void export(Session session) {
-        String filename = session.getSessionId() + ".json";
+    public void export(SessionSummary summary) {
+        String filename = summary.getSession().getSessionId() + ".json";
          JsonObject root = new JsonObject();
-        //session summary not defined yet placeholer
-          SessionSummary summary = SessionSummary.compute(session);
+
 
         root.addProperty("schema_version", "1.0");
-        root.add("session", buildSession(session));
+        root.add("session", buildSession(summary.getSession()));
         root.add("summary", buildSummary(summary));
-        root.add("events",  buildEvents(session));
+        root.add("events",  buildEvents(summary.getSession().getEvents()));
 
         try (FileWriter writer = new FileWriter(filename)) {
-            gson.toJson(session, writer);
+            gson.toJson(summary, writer);
             System.out.println("[JsonExporter] Session exported to " + filename);
         } catch (IOException e) {
             System.err.println("[JsonExporter] Error exporting session: " + e.getMessage());
@@ -45,7 +44,7 @@ public class JsonExporter implements ExporterInterface {
         o.addProperty("start_time", s.getStartTime() == null ? null : s.getStartTime().toString());
         o.addProperty("end_time",   s.getEndTime()   == null ? null : s.getEndTime().toString());
         o.addProperty("duration_seconds", durationSeconds(s));
-        o.addProperty("java_version", System.getProperty("java.version"));
+      
         return o;
     }
 
@@ -57,6 +56,7 @@ public class JsonExporter implements ExporterInterface {
             o.addProperty("seq",       e.getSequence());
             o.addProperty("timestamp", e.getTimestamp().toString());
             o.addProperty("type",      e.getEventType().name());
+            //
             o.add("details", gson.toJsonTree(e.getEventDetails()));
             arr.add(o);
         }
@@ -64,22 +64,19 @@ public class JsonExporter implements ExporterInterface {
     }
     //method comes into play when a Session is defined according to the schema below
     //SessionSummary does not exist current but will be added by a different name or same name
-    private JsonObject buildSummary(SessionSummary sum) {
+    private JsonObject buildSummary(SessionSummary summary) {
         JsonObject o = new JsonObject();
-        o.addProperty("total_compilations",      sum.totalCompilations);
-        o.addProperty("successful_compilations", sum.successfulCompilations);
-        o.addProperty("failed_compilations",     sum.failedCompilations);
-        o.addProperty("compile_success_rate",    sum.compileSuccessRate);
-        o.addProperty("total_runs",              sum.totalRuns);
-        o.addProperty("runtime_exceptions",      sum.runtimeExceptions);
-        o.addProperty("compile_to_run_ratio",    sum.compileToRunRatio);
-        o.addProperty("active_seconds",          sum.activeSeconds);
-        o.addProperty("idle_seconds",            sum.idleSeconds);
-        o.addProperty("classes_created",         sum.classesCreated);
-        o.addProperty("classes_deleted",         sum.classesDeleted);
+        o.addProperty("total_compilations",      summary.getCompilationSummary().getTotalCompilations());
+        o.addProperty("successful_compilations", summary.getCompilationSummary().getSuccessfulCompilations());
+        o.addProperty("failed_compilations",     summary.getCompilationSummary().getFailedCompilations());
+        o.addProperty("compile_success_rate",    summary.getCompilationSummary().getCompilationSuccessRate());
+        // o.addProperty("active_seconds",          summary.ActiveSeconds());
+        // o.addProperty("idle_seconds",            summary.idleSeconds());
+        o.addProperty("classes_created",       summary.getClassLifeSummary().getClassesCreated());
+        o.addProperty("classes_deleted",      summary.getClassLifeSummary().getClassesDeleted());
 
         JsonObject freq = new JsonObject();
-        sum.errorFrequency.forEach(freq::addProperty);
+        summary.errorFrequency.forEach(freq::addProperty);
         o.add("error_frequency", freq);
         return o;
     }

@@ -1,6 +1,6 @@
 package project.comp3607.export;
 
-import project.comp3607.model.Session;
+import project.comp3607.model.SessionSummary;
 
 public interface ExporterInterface {
     /**
@@ -9,7 +9,7 @@ public interface ExporterInterface {
     * @param sessionId the unique identifier used for the filenames.
     */
 
-    void export(Session session);
+    void export(SessionSummary session);
 
     //returns a PDF OR JSON
     String getDisplayName();
