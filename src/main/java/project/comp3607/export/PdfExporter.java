@@ -53,10 +53,10 @@ public class PdfExporter implements ExporterInterface {
             PdfWriter.getInstance(doc, out);
             doc.open();
 
-            addHeader(doc, session, summary);
+            addHeader(doc, summary);
             addActiveIdleChart(doc, summary);
             addErrorFrequencyChart(doc, summary);
-            addProgressionTimeline(doc, session);
+            addProgressionTimeline(doc, summary);
 
             doc.close();
             System.out.println("[PdfExporter] Session exported to " + filename);
@@ -83,10 +83,13 @@ public class PdfExporter implements ExporterInterface {
         row(meta, "Started",     fmt(summary.getSession().getStartTime()));
         row(meta, "Ended",       fmt(summary.getSession().getEndTime()));
         //row(meta, "Duration",    (summary.getSession().getActiveSeconds() + summary.getSession().getIdleSeconds()) + " s");
+        
+        
         row(meta, "Compilations", summary.getCompilationSummary().getTotalCompilations()
-                + "  (" + summary.successfulCompilations + " ok / "
-                + summary.failedCompilations + " failed, "
-                + String.format("%.0f%%", summary.compileSuccessRate * 100) + ")");
+                + "  (" + summary.getCompilationSummary().getSuccessfulCompilations + " success / "
+                + summary.getCompilationSummary().getFailedCompilations() + " failed, "
+                + String.format("%.0f%%", summary.getCompilationSummary().getSuccessfulCompilations
+                /summary.getCompilationSummary().getTotalCompilations())+ "successrate" + ")");
 
         doc.add(meta);
         doc.add(Chunk.NEWLINE);
@@ -99,16 +102,16 @@ public class PdfExporter implements ExporterInterface {
     private void addActiveIdleChart(Document doc, SessionSummary summary) throws Exception {
         doc.add(new Paragraph("Active vs Idle Time", H2));
 
-        long active = summary.getSessionSummary().getActiveSeconds(), idle = summary.getSessionSummary().getIdleSeconds();
-        if (active + idle == 0) {
-            doc.add(new Paragraph("No timed events recorded.", MUTED));
-            doc.add(Chunk.NEWLINE);
-            return;
-        }
+        // long active = summary.getSessionSummary().getActiveSeconds(), idle = summary.getSessionSummary().getIdleSeconds();
+        // if (active + idle == 0) {
+        //     doc.add(new Paragraph("No timed events recorded.", MUTED));
+        //     doc.add(Chunk.NEWLINE);
+        //     return;
+        // }
 
-        DefaultPieDataset<String> data = new DefaultPieDataset<>();
-        data.setValue("Active (" + active + " s)", active);
-        data.setValue("Idle ("   + idle   + " s)", idle);
+        // DefaultPieDataset<String> data = new DefaultPieDataset<>();
+        // data.setValue("Active (" + active + " s)", active);
+        // data.setValue("Idle ("   + idle   + " s)", idle);
 
         JFreeChart chart = ChartFactory.createPieChart(
                 null, data, /*legend*/ true, /*tooltips*/ false, /*urls*/ false);
@@ -118,14 +121,14 @@ public class PdfExporter implements ExporterInterface {
     private void addErrorFrequencyChart(Document doc, SessionSummary summary) throws Exception {
         doc.add(new Paragraph("Compilation Error Frequency", H2));
 
-        if (sum.errorFrequency.isEmpty()) {
+        if (summary.getErrorFrequency().isEmpty()) {
             doc.add(new Paragraph("No compilation errors recorded.", MUTED));
             doc.add(Chunk.NEWLINE);
             return;
         }
 
         DefaultCategoryDataset data = new DefaultCategoryDataset();
-        for (Map.Entry<String, Integer> e : sum.errorFrequency.entrySet()) {
+        for (Map.Entry<String, Integer> e : summary.getErrorFrequency.entrySet()) {
             data.addValue(e.getValue(), "Errors", e.getKey());
         }
 
@@ -139,7 +142,7 @@ public class PdfExporter implements ExporterInterface {
     private void addProgressionTimeline(Document doc, SessionSummary summary) throws Exception {
         doc.add(new Paragraph("Progression Timeline", H2));
 
-        List<Event> progression = session.getSessionSummary().getEvents().stream()
+        List<Event> progression = summary.getSessionSummary().getEvents().stream()
                 .filter(e -> switch (e.getEventType()) {
                     case SESSION_START, SESSION_END ->true; //CLASS_MODIFIED, METHOD_ADDED -> true;
                     default -> false;
