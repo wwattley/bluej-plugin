@@ -25,7 +25,8 @@ public class PdfExporterTest {
     //returns a Sessionsummary so the .export method can export it as a PDF
     private static SessionSummary summary() {
         Session s = new Session();
-        s.addEvent(new Event(1, EventTypeEnum.SESSION_START, Map.of(), T0));
+        SessionSummary summary = new SessionSummary(s);
+        s.addEvent(new Event(1, EventTypeEnum.SESSION_START, Map.of()));
         s.addEvent(new Event(2, EventTypeEnum.COMPILE_ERROR,
                 Map.of("category", "CANNOT_FIND_SYMBOL"), T0.plusSeconds(20)));
         s.addEvent(new Event(3, EventTypeEnum.CLASS_CREATED,
