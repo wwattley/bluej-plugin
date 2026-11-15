@@ -16,7 +16,7 @@ public class SessionSummary {
 
     public Session getSession() { return session; }
     public CompilationSummary getCompilationSummary() { return compilationSummary; }
-    public ActivitySession getActivitySession() { return activitySession; }
+    public ActivitySession getActivitySummary() { return activitySession; }
     public ClassLifeSummary getClassLifeSummary() { return classLifeSummary; }
 
 }
