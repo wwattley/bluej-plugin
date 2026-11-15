@@ -15,7 +15,7 @@ class ClassLifeSummaryTest {
     private static final Instant T0 = Instant.parse("2026-11-01T10:00:00Z");
 
     private static Event event(EventTypeEnum type) {
-        return new Event(1, type, Map.of("ClassNameTesting", "X123456"));
+        return new Event(1, type, Map.of("ClassNameTesting", T0));
     }
 
     @Test
