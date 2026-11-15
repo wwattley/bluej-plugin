@@ -10,7 +10,7 @@ public class SessionSummary {
     public SessionSummary(Session currentSession) {
         this.session = currentSession;
         this.compilationSummary = CompilationSummary.compute(currentSession);
-        this.activitySession = ActivitySession.compute();
+        this.activitySession = ActivitySession.compute(currentSession);
         this.classLifeSummary = ClassLifeSummary.compute(currentSession);
     }
 

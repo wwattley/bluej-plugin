@@ -69,8 +69,8 @@ public class JsonExporter implements ExporterInterface {
         o.addProperty("successful_compilations", summary.getCompilationSummary().getSuccessfulCompilations());
         o.addProperty("failed_compilations",     summary.getCompilationSummary().getFailedCompilations());
         o.addProperty("compile_success_rate",    summary.getCompilationSummary().getCompilationSuccessRate());
-        // o.addProperty("active_seconds",          summary.ActiveSeconds());
-        // o.addProperty("idle_seconds",            summary.idleSeconds());
+        o.addProperty("active_seconds",          summary.getActivitySummary().getActiveSeconds());
+        o.addProperty("idle_seconds",            summary.getActivitySummary().getIdleSeconds());
         o.addProperty("classes_created",       summary.getClassLifeSummary().getClassesCreated());
         o.addProperty("classes_deleted",      summary.getClassLifeSummary().getClassesDeleted());
 

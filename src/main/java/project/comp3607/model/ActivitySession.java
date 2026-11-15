@@ -27,7 +27,9 @@ public class ActivitySession {
     private static boolean isActivityEvent(Event event) {
         EventTypeEnum eventType = event.getEventType();
 
-        if (eventType == EventTypeEnum.CLASS_CREATED ||
+        if (eventType == EventTypeEnum.PACKAGE_OPEN ||
+            eventType == EventTypeEnum.PACKAGE_CLOSE ||
+            eventType == EventTypeEnum.CLASS_CREATED ||
             eventType == EventTypeEnum.CLASS_DELETED ||
             eventType == EventTypeEnum.COMPILE_SUCCEEDED ||
             eventType == EventTypeEnum.COMPILE_ERROR)
@@ -59,9 +61,9 @@ public class ActivitySession {
                 }
             }
 
-            if (nextActivityTime == null) break;
+            Instant upperBound = nextActivityTime != null ? nextActivityTime : events.get(events.size() - 1).getTimestamp();
 
-            long gapSeconds = Duration.between(curr.getTimestamp(), nextActivityTime).getSeconds();
+            long gapSeconds = Duration.between(curr.getTimestamp(), upperBound).getSeconds();
             activeSeconds += Math.min(gapSeconds, 60L);
 
         }
