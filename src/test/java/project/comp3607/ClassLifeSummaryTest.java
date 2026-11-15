@@ -5,17 +5,17 @@ import project.comp3607.events.Event;
 import project.comp3607.events.EventTypeEnum;
 import project.comp3607.model.ClassLifeSummary;
 import project.comp3607.model.Session;
-import java.time.Instant;
+
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClassLifeSummaryTest {
 
-   
+
 
     private static Event event(EventTypeEnum type) {
-        return new Event(1, type, Map.of("ClassNameTesting", T0));
+        return new Event(1, type, Map.of("ClassNameTesting", "Bob"));
     }
 
     @Test

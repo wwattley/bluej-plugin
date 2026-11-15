@@ -10,16 +10,16 @@ import project.comp3607.export.PdfExporter;
 import project.comp3607.model.Session;
 import project.comp3607.model.SessionSummary;
 
-import java.nio.charset.StandardCharsets;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
+
 import java.util.Map;
 
 
 public class PdfExporterTest {
      private static final Path OUTPUT = Path.of("SESSION_ID_PLACEHOLDER.pdf");//test pdf
-    private static final Instant T0 = Instant.parse("2026-11-01T10:00:00Z");//test date
+
 
     //internal method to build a testSummary for Exporter to Test
     //returns a Sessionsummary so the .export method can export it as a PDF
